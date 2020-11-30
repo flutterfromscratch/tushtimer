@@ -34,13 +34,11 @@ class TimerWidget extends StatelessWidget {
               duration: Duration(seconds: 1),
               color: state.phase == TimerPhase.ACTIVE
                   ? state.timer.color
-                  : state.phase == TimerPhase.RESTING
-                      ? Theme.of(context).cardTheme.color
-                      : Colors.white24,
+                  : Theme.of(context).cardTheme.color,
               padding: EdgeInsets.all(20),
               child: Column(
                 // Key(state.phase.toString()),
-                key: Key(state.phase.toString()),
+                // key: Key(state.phase.toString()),
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
@@ -58,16 +56,24 @@ class TimerWidget extends StatelessWidget {
                                 //         : Theme.of(context).primaryColor,
                               )),
                         ),
-                        Center(child: Text(state.timer.name)),
-                        FloatingActionButton(
-                          child: Icon(Icons.remove),
-                          mini: true,
-                          clipBehavior: Clip.antiAlias,
-                          onPressed: () {
-                            BlocProvider.of<HomeBloc>(context)
-                                .add(DeleteTimerEvent(timer));
-                          },
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(state.timer.name),
+                            if (state.phase == TimerPhase.ACTIVE)
+                              _formatTime(state.remainingTime),
+                          ],
                         ),
+                        if (state.phase == TimerPhase.PAUSED)
+                          FloatingActionButton(
+                            child: Icon(Icons.remove),
+                            mini: true,
+                            clipBehavior: Clip.antiAlias,
+                            onPressed: () {
+                              BlocProvider.of<HomeBloc>(context)
+                                  .add(DeleteTimerEvent(timer));
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -79,6 +85,27 @@ class TimerWidget extends StatelessWidget {
         }
         return CircularProgressIndicator();
       }),
+    );
+  }
+}
+
+Widget _formatTime(int? remainingTime) {
+  if (remainingTime == null) return Container();
+  final duration = Duration(seconds: remainingTime);
+  if (remainingTime > 60) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(duration.inMinutes.toString()),
+        Text("m, "),
+        Text(duration.inSeconds.remainder(60).toString()),
+        Text("s")
+      ],
+    );
+  } else {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [Text(duration.inSeconds.remainder(60).toString()), Text("s")],
     );
   }
 }

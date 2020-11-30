@@ -22,6 +22,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       if (event == GlobalTimerState.RUNNING) {
         print('timer received event');
         add(StartTimerEvent());
+      } else if (event == GlobalTimerState.RESET) {
+        print('timer recieved event to stop');
+        add(StopTimerEvent());
       }
     });
   }
@@ -80,7 +83,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         // yield(TimerLoadedState())
       }
     }
-    if (event is StopTimerEvent) _timer?.cancel();
+    if (event is StopTimerEvent) {
+      _timer?.cancel();
+    }
     // TODO: implement mapEventToState
   }
 }

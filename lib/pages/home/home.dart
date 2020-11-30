@@ -35,29 +35,88 @@ class _StandTimerHomeState extends State<StandTimerHome> {
         builder: (context, state) {
           if (state is TimersLoadedState) {
             if (state.timers.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("Add some timers to get started!"),
-                    ConstrainedBox(
-                      child: Image.asset('assets/bike.png'),
-                      constraints: BoxConstraints(maxHeight: 200),
-                    ),
-                  ],
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Add some timers to get started!"),
+                      ConstrainedBox(
+                        child: Image.asset('assets/bike.png'),
+                        constraints: BoxConstraints(maxHeight: 200),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: FlatButton.icon(
+                          // color: Colors.purple,
+                          icon: Icon(Icons.timer),
+                          onPressed: () {
+                            showDialog<void>(
+                                    builder: (c) =>
+                                        Dialog(child: NewTimerWidget()),
+                                    context: context)
+                                .then((value) =>
+                                    BlocProvider.of<HomeBloc>(context)
+                                        .add(LoadTimersEvent()));
+                          },
+                          label: Text('CREATE TIMER'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             } else {
-              return GridView.count(
-                crossAxisCount: (MediaQuery.of(context).size.shortestSide / 120)
-                    .floor()
-                    .clamp(2, 5),
-                children: state.timers
-                    .map((e) => TimerWidget(
-                          timer: e,
-                        ))
-                    .toList(),
+              return Scaffold(
+                body: GridView.count(
+                  crossAxisCount:
+                      (MediaQuery.of(context).size.shortestSide / 120)
+                          .floor()
+                          .clamp(2, 5),
+                  children: state.timers
+                      .map((e) => TimerWidget(
+                            timer: e,
+                          ))
+                      .toList(),
+                ),
+                floatingActionButton: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          if (state.running) {
+                            BlocProvider.of<HomeBloc>(context)
+                                .add(StopTimersEvent());
+                          } else {
+                            BlocProvider.of<HomeBloc>(context)
+                                .add(StartTimersEvent());
+                          }
+                        },
+                        child: state.running
+                            ? Icon(Icons.stop)
+                            : Icon(Icons.play_arrow),
+                      ),
+                    ),
+                    if (!state.running)
+                      FloatingActionButton(
+                        // onPressed: _incrementCounter,
+                        // tooltip: 'Increment',
+                        onPressed: () {
+                          showDialog<void>(
+                                  builder: (c) =>
+                                      Dialog(child: NewTimerWidget()),
+                                  context: context)
+                              .then((value) =>
+                                  BlocProvider.of<HomeBloc>(context)
+                                      .add(LoadTimersEvent()));
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                  ],
+                ),
               );
             }
           }
@@ -66,32 +125,6 @@ class _StandTimerHomeState extends State<StandTimerHome> {
           );
         },
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-            child: FloatingActionButton(
-              onPressed: () {
-                BlocProvider.of<HomeBloc>(context).add(StartTimersEvent());
-              },
-              child: Icon(Icons.play_arrow),
-            ),
-          ),
-          FloatingActionButton(
-            // onPressed: _incrementCounter,
-            // tooltip: 'Increment',
-            onPressed: () {
-              showDialog<void>(
-                      builder: (c) => Dialog(child: NewTimerWidget()),
-                      context: context)
-                  .then((value) => BlocProvider.of<HomeBloc>(context)
-                      .add(LoadTimersEvent()));
-            },
-            child: Icon(Icons.add),
-          ),
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

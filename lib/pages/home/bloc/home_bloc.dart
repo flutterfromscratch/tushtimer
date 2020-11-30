@@ -30,12 +30,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final timers = await _databaseService.timers();
       yield TimersLoadedState(timers, false);
     }
-    if (event is DeleteTimerEvent){
+    if (event is DeleteTimerEvent) {
       await _databaseService.removeTimer(event.timer.key as int);
       add(LoadTimersEvent());
     }
-    if (event is StartTimersEvent){
+    if (event is StartTimersEvent) {
+      if (state is TimersLoadedState) {
+        final timers = (state as TimersLoadedState).timers;
+        yield TimersLoadedState(timers, true);
+      }
+      // yield(TimersLoadedState())
       timerCoordinator.add(GlobalTimerState.RUNNING);
+    }
+    if (event is StopTimersEvent) {
+      if (state is TimersLoadedState) {
+        timerCoordinator.add(GlobalTimerState.RESET);
+        final timers = (state as TimersLoadedState).timers;
+        yield TimersLoadedState(timers, false);
+      }
     }
 
     // TODO: implement mapEventToState

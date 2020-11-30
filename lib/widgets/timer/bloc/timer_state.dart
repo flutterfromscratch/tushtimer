@@ -20,6 +20,12 @@ class TimerLoadedState extends TimerState {
   @override
   // TODO: implement props
   List<Object> get props => [timer, phase, remainingTime ?? 0];
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return '${timer.name}: ${remainingTime} (${phase})';
+  }
 }
 
 class DeleteTimerState extends TimerState {
