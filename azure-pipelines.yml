@@ -14,7 +14,25 @@ steps:
   inputs:
     channel: 'dev'
     version: 'latest'
-- task: FlutterBuild@0
+
+- task: Bash@3
   inputs:
-    target: 'all'
-    projectDirectory: '.'
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      
+      #  flutter config --enable-windows-desktop
+       flutter config --enable-macos-desktop
+       flutter config --enable-linux-desktop
+
+# - task: FlutterCommand@0
+#   inputs:
+#     arguments: 'build windows --release'
+
+- task: FlutterCommand@0
+  inputs:
+    arguments: 'build macos --release'
+
+- task: FlutterCommand@0
+  inputs:
+    arguments: 'build linux --release'
