@@ -14,15 +14,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final DatabaseService _databaseService;
   final PreferencesService _preferencesService;
 
-  HomeBloc(this._databaseService, this._preferencesService) : super(HomeInitial());
+  final timerCoordinator =
+      StreamController<GlobalTimerState>.broadcast(onListen: () {
+    print('new timer attached');
+  });
+
+  HomeBloc(this._databaseService, this._preferencesService)
+      : super(HomeInitial());
 
   @override
   Stream<HomeState> mapEventToState(
     HomeEvent event,
   ) async* {
-    final timers = await _databaseService.timers();
-    yield TimersLoadedState(timers, false);
+    if (event is LoadTimersEvent) {
+      final timers = await _databaseService.timers();
+      yield TimersLoadedState(timers, false);
+    }
+    if (event is DeleteTimerEvent){
+      await _databaseService.removeTimer(event.timer.key as int);
+      add(LoadTimersEvent());
+    }
+    if (event is StartTimersEvent){
+      timerCoordinator.add(GlobalTimerState.RUNNING);
+    }
 
     // TODO: implement mapEventToState
   }
 }
+
+enum GlobalTimerState { RUNNING, PAUSED, RESET }

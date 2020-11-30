@@ -9,3 +9,21 @@ class LoadTimersEvent extends HomeEvent {
   // TODO: implement props
   List<Object> get props => [];
 }
+
+class DeleteTimerEvent extends HomeEvent{
+  final ActivityTimer timer;
+
+  DeleteTimerEvent(this.timer);
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [timer];
+
+}
+
+class StartTimersEvent extends HomeEvent{
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+
+}

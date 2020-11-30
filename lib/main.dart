@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:standtimer/main_bloc.dart';
+import 'package:standtimer/pages/home/bloc/home_bloc.dart';
 import 'package:standtimer/pages/home/home.dart';
 // import 'file:///C:/code/standtimer/lib/pages/home/home.dart';
 import 'package:standtimer/services/database.dart';
@@ -46,7 +47,12 @@ class MyApp extends StatelessWidget {
           child: BlocBuilder<MainBloc, MainState>(
             builder: (context, state) {
               if (state is ServicesReadyState) {
-                return StandTimerHome();
+                return BlocProvider(
+                    create: (context) => HomeBloc(
+                          RepositoryProvider.of<DatabaseService>(context),
+                          RepositoryProvider.of<PreferencesService>(context),
+                        )..add(LoadTimersEvent()),
+                    child: StandTimerHome());
               }
               return Material(
                 child: Column(

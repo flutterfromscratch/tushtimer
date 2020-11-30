@@ -31,3 +31,13 @@ class TimerTickEvent extends TimerEvent {
   // TODO: implement props
   List<Object> get props => [];
 }
+
+class DeleteChildTimerEvent extends TimerEvent{
+  final ActivityTimer timer;
+
+  DeleteChildTimerEvent(this.timer);
+  @override
+  // TODO: implement props
+  List<Object> get props => [timer];
+
+}

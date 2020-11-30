@@ -35,6 +35,7 @@ class DatabaseService {
 
   Future removeTimer(final int timerId) async {
     await _timerBox.deleteAt(timerId);
+    // await _timerBox.deleteAt(timerId);
     // _timerBox.watch()
   }
 

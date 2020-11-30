@@ -1,16 +1,28 @@
 import 'dart:async';
-
+//You need to import this
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:standtimer/database/database.dart';
+import 'package:standtimer/pages/home/bloc/home_bloc.dart';
 
 part 'timer_event.dart';
 part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
-  late Timer? _timer;
+  late RestartableTimer? _timer;
+  // final _timer = RestartableTimer(Duration(seconds: 1), timerTickCallback);
+  // final ActivityTimer _activityTimer;
+  final Stream<GlobalTimerState> _globalTimerState;
 
-  TimerBloc() : super(TimerInitial());
+  TimerBloc(this._globalTimerState) : super(TimerInitial()) {
+    _globalTimerState.listen((event) {
+      if (event == GlobalTimerState.RUNNING) {
+        print('timer received event');
+        add(StartTimerEvent());
+      }
+    });
+  }
 
   @override
   Stream<TimerState> mapEventToState(
@@ -20,12 +32,16 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield TimerLoadedState(event.timer, TimerPhase.PAUSED);
     }
     if (event is StartTimerEvent) {
-      _timer?.cancel();
-      _timer = Timer(Duration(seconds: 1), () {
+      print('starting timer...');
+      // yield TimerLoadedState(event);
+      // _timer.reset();
+      // _timer?.cancel();
+      _timer = RestartableTimer(Duration(seconds: 1), () {
         add(TimerTickEvent());
       });
     }
     if (event is TimerTickEvent) {
+      print('timer tick event');
       if (state is TimerLoadedState) {
         final timerState = state as TimerLoadedState;
         if (timerState.remainingTime == 0) {
@@ -35,7 +51,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           } else if (timerState.phase == TimerPhase.RESTING) {
             if (timerState.timer.automaticRepeat) {
               _timer?.cancel();
-              _timer = Timer(Duration(seconds: 1), () {
+              _timer = RestartableTimer(Duration(seconds: 1), () {
                 add(TimerTickEvent());
               });
             } else {
@@ -43,9 +59,13 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
             }
           }
         } else {
+          print((timerState.remainingTime! - 1).toString() + " seconds left");
           yield TimerLoadedState(timerState.timer, timerState.phase,
-              remainingTime: timerState.remainingTime == null ? timerState.timer.intervalDurationMinutes * 60 : timerState.remainingTime! - 1);
+              remainingTime: timerState.remainingTime == null
+                  ? timerState.timer.intervalDurationMinutes * 60
+                  : timerState.remainingTime! - 1);
         }
+        _timer?.reset();
 
         // yield(TimerLoadedState())
       }
