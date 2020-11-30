@@ -1,7 +1,9 @@
 // @dart=2.11
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:standtimer/blocdelegate.dart';
 import 'package:standtimer/main_bloc.dart';
 import 'package:standtimer/pages/home/bloc/home_bloc.dart';
 import 'package:standtimer/pages/home/home.dart';
@@ -9,8 +11,12 @@ import 'package:standtimer/pages/home/home.dart';
 import 'package:standtimer/services/database.dart';
 import 'package:standtimer/services/preferences.dart';
 import 'package:standtimer/widgets/timer/timer.dart';
+// import 'package:window_utils/window_utils.dart';
+
+const TIME_MULTIPLIER_FACTOR = kReleaseMode ? 60 : 1;
 
 void main() {
+  Bloc.observer = SimpleBlocDelegate();
   runApp(MyApp());
 }
 

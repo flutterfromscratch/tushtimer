@@ -34,10 +34,13 @@ class DatabaseService {
   }
 
   Future removeTimer(final int timerId) async {
-    await _timerBox.deleteAt(timerId);
+    await _timerBox.delete(timerId);
+
+    // await _timerBox.deleteAt(timerId);
     // await _timerBox.deleteAt(timerId);
     // _timerBox.watch()
   }
 
-  Future<List<ActivityTimer>> timers() async => _timerBox.values.toList(growable: false);
+  Future<List<ActivityTimer>> timers() async =>
+      _timerBox.values.toList(growable: false);
 }

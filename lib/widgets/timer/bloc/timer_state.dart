@@ -19,17 +19,16 @@ class TimerLoadedState extends TimerState {
 
   @override
   // TODO: implement props
-  List<Object> get props => [timer];
+  List<Object> get props => [timer, phase, remainingTime ?? 0];
 }
 
-class DeleteTimerState extends TimerState{
+class DeleteTimerState extends TimerState {
   final ActivityTimer timer;
 
   DeleteTimerState(this.timer);
   @override
   // TODO: implement props
   List<Object> get props => [timer];
-
 }
 
 enum TimerPhase { ACTIVE, RESTING, PAUSED }

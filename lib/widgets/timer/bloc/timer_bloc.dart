@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:standtimer/database/database.dart';
+import 'package:standtimer/main.dart';
 import 'package:standtimer/pages/home/bloc/home_bloc.dart';
 
 part 'timer_event.dart';
@@ -29,7 +31,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     TimerEvent event,
   ) async* {
     if (event is LoadTimerEvent) {
-      yield TimerLoadedState(event.timer, TimerPhase.PAUSED);
+      yield TimerLoadedState(event.timer, TimerPhase.PAUSED,
+          remainingTime:
+              event.timer.intervalDurationMinutes * TIME_MULTIPLIER_FACTOR);
     }
     if (event is StartTimerEvent) {
       print('starting timer...');
@@ -44,12 +48,20 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       print('timer tick event');
       if (state is TimerLoadedState) {
         final timerState = state as TimerLoadedState;
-        if (timerState.remainingTime == 0) {
+        if (timerState.phase == TimerPhase.PAUSED) {
+          yield TimerLoadedState(timerState.timer, TimerPhase.ACTIVE,
+              remainingTime: timerState.timer.intervalDurationMinutes *
+                  TIME_MULTIPLIER_FACTOR);
+        } else if (timerState.remainingTime == 0) {
           if (timerState.phase == TimerPhase.ACTIVE) {
             // switching from active to resting phase
-            yield TimerLoadedState(timerState.timer, TimerPhase.RESTING);
+            yield TimerLoadedState(timerState.timer, TimerPhase.RESTING,
+                remainingTime: timerState.timer.restDurationSeconds);
           } else if (timerState.phase == TimerPhase.RESTING) {
             if (timerState.timer.automaticRepeat) {
+              yield TimerLoadedState(timerState.timer, TimerPhase.ACTIVE,
+                  remainingTime: timerState.timer.intervalDurationMinutes *
+                      TIME_MULTIPLIER_FACTOR);
               _timer?.cancel();
               _timer = RestartableTimer(Duration(seconds: 1), () {
                 add(TimerTickEvent());
@@ -59,11 +71,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
             }
           }
         } else {
-          print((timerState.remainingTime! - 1).toString() + " seconds left");
           yield TimerLoadedState(timerState.timer, timerState.phase,
-              remainingTime: timerState.remainingTime == null
-                  ? timerState.timer.intervalDurationMinutes * 60
-                  : timerState.remainingTime! - 1);
+              remainingTime: timerState.remainingTime! - 1);
+          print(timerState.remainingTime);
         }
         _timer?.reset();
 
