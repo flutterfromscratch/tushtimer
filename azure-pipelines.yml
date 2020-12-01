@@ -21,15 +21,18 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      export PATH="$PATH:`pwd`$(FlutterToolPath)"
+      echo 'PATH is set to'
+      echo $PATH
       # Write your commands here
-      $(FlutterToolPath)/flutter config --enable-macos-desktop
-      $(FlutterToolPath)/flutter config --enable-linux-desktop
-      $(FlutterToolPath)/flutter config --enable-web
+      flutter config --enable-macos-desktop
+      flutter config --enable-linux-desktop
+      flutter config --enable-web
       
       echo 'building flutter apps...'
-      $(FlutterToolPath)/flutter build macos --release
-      $(FlutterToolPath)/flutter build linux --release
-      $(FlutterToolPath)/flutter build web --release
+      flutter build macos --release
+      flutter build linux --release
+      flutter build web --release
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
