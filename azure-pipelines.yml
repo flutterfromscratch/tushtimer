@@ -25,7 +25,13 @@ steps:
       echo 'PATH is set to'
       echo $PATH
       # Write your commands here
-      $(FlutterToolPath)/flutter config --enable-macos-desktop && $(FlutterToolPath)/flutter config --enable-web && $(FlutterToolPath)/flutter build macos && $(FlutterToolPath)/flutter build web
+      $(FlutterToolPath)/flutter channel dev
+      $(FlutterToolPath)/flutter upgrade
+      $(FlutterToolPath)/flutter doctor
+      $(FlutterToolPath)/flutter config --enable-macos-desktop 
+      $(FlutterToolPath)/flutter config --enable-web 
+      $(FlutterToolPath)/flutter build macos
+      $(FlutterToolPath)/flutter build web
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
