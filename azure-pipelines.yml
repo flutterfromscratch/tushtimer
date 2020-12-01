@@ -34,3 +34,9 @@ steps:
 - task: FlutterCommand@0
   inputs:
     arguments: 'build linux --release'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
