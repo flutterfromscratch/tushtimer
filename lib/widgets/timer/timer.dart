@@ -56,13 +56,19 @@ class TimerWidget extends StatelessWidget {
                                 //         : Theme.of(context).primaryColor,
                               )),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(state.timer.name),
-                            if (state.phase == TimerPhase.ACTIVE)
-                              _formatTime(state.remainingTime),
-                          ],
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(state.timer.name),
+                              if (state.phase == TimerPhase.ACTIVE)
+                                Column(
+                                  children: [
+                                    _formatTime(state.remainingTime),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
                         if (state.phase == TimerPhase.PAUSED)
                           FloatingActionButton(
@@ -96,9 +102,15 @@ Widget _formatTime(int? remainingTime) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(duration.inMinutes.toString()),
+        Text(
+          duration.inMinutes.toString(),
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         Text("m, "),
-        Text(duration.inSeconds.remainder(60).toString()),
+        Text(
+          duration.inSeconds.remainder(60).toString(),
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         Text("s")
       ],
     );
