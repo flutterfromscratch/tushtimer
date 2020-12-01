@@ -41,9 +41,9 @@ steps:
     script: |
       # Write your commands here
       echo 'building flutter apps...'
-      $(FlutterToolPath) build macos --release
-      $(FlutterToolPath) build linux --release
-      $(FlutterToolPath) build web --release
+      $(FlutterToolPath)/flutter build macos --release
+      $(FlutterToolPath)/flutter build linux --release
+      $(FlutterToolPath)/flutter build web --release
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
