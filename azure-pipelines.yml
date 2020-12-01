@@ -40,11 +40,6 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: 'linux'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/linux'
-- task: CopyFiles@2
-  inputs:
     SourceFolder: 'web'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/web'
