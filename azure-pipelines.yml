@@ -17,29 +17,15 @@ steps:
 #   inputs:
 #     arguments: 'build windows --release'
 
-- task: FlutterCommand@0
-  inputs:
-    arguments: 'config --enable-macos-desktop'
-
-- task: FlutterCommand@0
-  inputs:
-    arguments: 'config --enable-linux-desktop'
-
-- task: FlutterCommand@0
-  inputs:
-    arguments: 'build macos --release'
-
-- task: FlutterCommand@0
-  inputs:
-    arguments: 'build linux --release'
-- task: FlutterCommand@0
-  inputs:
-    arguments: 'build web --release'
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
       # Write your commands here
+      $(FlutterToolPath)/flutter config --enable-macos-desktop
+      $(FlutterToolPath)/flutter config --enable-linux-desktop
+      $(FlutterToolPath)/flutter config --enable-web
+      
       echo 'building flutter apps...'
       $(FlutterToolPath)/flutter build macos --release
       $(FlutterToolPath)/flutter build linux --release
