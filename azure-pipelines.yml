@@ -25,16 +25,7 @@ steps:
       echo 'PATH is set to'
       echo $PATH
       # Write your commands here
-      $(FlutterToolPath)/flutter config --enable-macos-desktop
-      $(FlutterToolPath)/flutter config --enable-linux-desktop
-      $(FlutterToolPath)/flutter config --enable-web
-
-      $(FlutterToolPath)/flutter devices
-      
-      echo 'building flutter apps...'
-      $(FlutterToolPath)/flutter build macos
-      $(FlutterToolPath)/flutter build linux
-      $(FlutterToolPath)/flutter build web
+      $(FlutterToolPath)/flutter config --enable-macos-desktop && $(FlutterToolPath)/flutter config --enable-web && $(FlutterToolPath)/flutter build macos && $(FlutterToolPath)/flutter build web
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
