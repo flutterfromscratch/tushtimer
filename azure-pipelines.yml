@@ -28,11 +28,13 @@ steps:
       $(FlutterToolPath)/flutter config --enable-macos-desktop
       $(FlutterToolPath)/flutter config --enable-linux-desktop
       $(FlutterToolPath)/flutter config --enable-web
+
+      $(FlutterToolPath)/flutter devices
       
       echo 'building flutter apps...'
-      $(FlutterToolPath)/flutter build macos --release
-      $(FlutterToolPath)/flutter build linux --release
-      $(FlutterToolPath)/flutter build web --release
+      $(FlutterToolPath)/flutter build macos
+      $(FlutterToolPath)/flutter build linux
+      $(FlutterToolPath)/flutter build web
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
