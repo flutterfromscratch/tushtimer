@@ -32,6 +32,25 @@ steps:
 - task: FlutterCommand@0
   inputs:
     arguments: 'build linux --release'
+- task: FlutterCommand@0
+  inputs:
+    arguments: 'build web --release'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'macos'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/macos'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'linux'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/linux'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'web'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/web'
 
 - task: PublishBuildArtifacts@1
   inputs:
