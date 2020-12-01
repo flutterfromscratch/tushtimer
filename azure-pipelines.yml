@@ -40,9 +40,10 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      
-      echo 'Hello world'
-      ls
+      echo 'building flutter apps...'
+      $(FlutterToolPath) build macos --release
+      $(FlutterToolPath) build linux --release
+      $(FlutterToolPath) build web --release
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'macos'
