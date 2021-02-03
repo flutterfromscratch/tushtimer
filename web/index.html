@@ -15,18 +15,18 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="TushTimer">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="standtimer">
+  <meta name="apple-mobile-web-app-title" content="TushTimer">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>standtimer</title>
+  <title>TushTimer - Test Release</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -41,5 +41,33 @@
     }
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
+
+<!-- firebase -->
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBrxV6_1AQd-NAg3uEJBAh3yRcbeAxYnaA",
+    authDomain: "tushtimer.firebaseapp.com",
+    databaseURL: "https://tushtimer.firebaseio.com",
+    projectId: "tushtimer",
+    storageBucket: "tushtimer.appspot.com",
+    messagingSenderId: "585004886879",
+    appId: "1:585004886879:web:1ff3145ff528c0934ce4ea",
+    measurementId: "G-QCNJ8F60ES"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
 </body>
 </html>
